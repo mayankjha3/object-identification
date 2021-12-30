@@ -1,6 +1,8 @@
 img = "";
 myStatus = "";
 
+objects = [];
+
 function preload(){
     img = loadImage("dog_cat.jpg");
 }
@@ -16,17 +18,18 @@ function setup(){
 function draw(){
     image(img , 0 , 0 , 640 , 420);
 
-    fill("#ff0000");
-    stroke("#ff0000");
-    noFill();
-    text("dog" , 45 , 75);
-    rect(30 , 60 , 450 , 350);
+    if(myStatus != ""){
+        for(i = 0; i < objects.length; i++){
+            console.log("stactus:object detected");
 
-    fill("#ff0000");
-    stroke("#ff0000");
-    noFill();
-    text("cat" , 320 , 120);
-    rect(300 , 90 , 270 , 320);
+            fill("#ff0000");
+            stroke("#ff0000");
+            noFill();
+            percent = floor(objects[i].confidence*100);
+            text( objects[i].label + " " + percent + " %", objects[i].x , objects[i].y);
+            rect(objects[i].x , objects[i].y , objects[i].width , objects[i].height);
+        }
+    }  
 }
 
 function modelLoaded(){
@@ -41,5 +44,6 @@ function gotResult(error , results){
         console.error(error);
     }else{
         console.log(results);
+        objects = results;
     }
 }
